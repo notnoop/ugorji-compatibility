@@ -9,7 +9,6 @@ import (
 "time"
 
 hcodec "github.com/hashicorp/go-msgpack/codec"
-"github.com/stretchr/testify/assert"
 "github.com/stretchr/testify/require"
 "github.com/ugorji/go/codec"
 
@@ -36,11 +35,10 @@ var oroundtripped $1
 decoder := hcodec.NewDecoder(&buf, hMsgpack)
 require.NoError(t, decoder.Decode(&oroundtripped))
 
-if skipHashicorpMismatch && !assert.ObjectsAreEqual(data, oroundtripped) {
-t.Skip("skipping because hashicorp does not preserve data")
+if checkHashicorpMismatch {
+assertEqual(t, data, oroundtripped, "hashicorp did not preserve data")
 }
 
-assert.Equal(t, data, oroundtripped, "hashicorp did not preserve data")
 
         r1 := t.Run(fmt.Sprintf("from ugorji to ugorji: %v", i), func(t *testing.T) {
         logStruct(t, data)
@@ -52,7 +50,7 @@ assert.Equal(t, data, oroundtripped, "hashicorp did not preserve data")
             decoder := codec.NewDecoder(&buf, uMsgpack)
             require.NoError(t, decoder.Decode(&dest))
 
-            require.Equal(t, data, dest)
+requireEqualsToEither(t, dest, data, oroundtripped)
         })
 
         r2 := t.Run(fmt.Sprintf("from hashicorp to ugorji: %v", i), func(t *testing.T) {
@@ -65,7 +63,7 @@ assert.Equal(t, data, oroundtripped, "hashicorp did not preserve data")
             decoder := codec.NewDecoder(&buf, uMsgpack)
             require.NoError(t, decoder.Decode(&dest))
 
-            require.Equal(t, data, dest)
+requireEqualsToEither(t, dest, data, oroundtripped)
         })
 
         r3 := t.Run(fmt.Sprintf("from ugorji to hashicorp: %v", i), func(t *testing.T) {
@@ -78,7 +76,7 @@ assert.Equal(t, data, oroundtripped, "hashicorp did not preserve data")
             decoder := hcodec.NewDecoder(&buf, hMsgpack)
             require.NoError(t, decoder.Decode(&dest))
 
-            require.Equal(t, data, dest)
+requireEqualsToEither(t, dest, data, oroundtripped)
         })
 
         if !(r1 && r2 && r3) {
