@@ -20,6 +20,6 @@ generate_structs() {
         | m4 ./generate_test_template.m4 -
 }
 
-generate_structs github.com/hashicorp/nomad/nomad/structs  NomadNomad >  nomad_nomad_structs_generated_test.go
-generate_structs github.com/hashicorp/nomad/client/structs NomadClient > nomad_client_structs_generated_test.go
-#generate_structs github.com/hashicorp/consul/agent/structs ConsulAgent > consul_agent_structs_generated_test.go
+#generate_structs github.com/hashicorp/nomad/nomad/structs  NomadNomad >  nomad_nomad_structs_generated_test.go
+#generate_structs github.com/hashicorp/nomad/client/structs NomadClient > nomad_client_structs_generated_test.go
+generate_structs github.com/hashicorp/consul/agent/structs ConsulAgent > consul_agent_structs_generated_test.go

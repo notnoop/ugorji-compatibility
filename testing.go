@@ -13,7 +13,7 @@ import (
 	"github.com/ugorji/go/codec"
 )
 
-const cases = 5000
+const cases = 500
 
 const checkHashicorpMismatch = false
 
